@@ -30,7 +30,8 @@ export default function MemberList() {
             className=""
             onClick={() => {
               if (input) {
-                setMembers(members ? [...members, input] : [input]);
+                const newMember = {id: crypto.randomUUID(), name: input};
+                setMembers(members ? [...members, newMember] : [newMember]);
                 setInput("");
               }
             }}
@@ -40,9 +41,9 @@ export default function MemberList() {
           </Button>
         </div>
         <ul className="mt-3 flex gap-2 flex-wrap">
-          {members?.map((member, index) => (
-            <li key={index} className="w-fit bg-blue-100 px-3 py-1 rounded-full text-sm">
-              {member}
+          {members?.map((member) => (
+            <li key={member.id} className="w-fit bg-blue-100 px-3 py-1 rounded-full text-sm">
+              {member.name}
             </li>
           ))}
         </ul>

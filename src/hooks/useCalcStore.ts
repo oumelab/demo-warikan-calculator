@@ -1,18 +1,24 @@
 import { create } from 'zustand';
 
 type membersStore ={
-  members: string[] | null;
-  expenses: {
-    id: string; // crypto.randomUUID()
-    name: string;
-    detail: string;
-    amount: number;
-  }[] | null;
-  totalExpenses: number;
-  setMembers: (members: string[]) => void;
-  setExpenses: (expenses: {
+  members: {
     id: string;
     name: string;
+  }[] | [];
+  expenses: {
+    id: string; // crypto.randomUUID()
+    memberId: string;
+    detail: string;
+    amount: number;
+  }[] | [];
+  totalExpenses: number;
+  setMembers: (members: {
+    id: string;
+    name: string;
+  }[]) => void;
+  setExpenses: (expenses: {
+    id: string;
+    memberId: string;
     detail: string;
     amount: number;
   }[]) => void;

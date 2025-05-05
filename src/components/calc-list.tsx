@@ -16,7 +16,7 @@ export default function CalcList() {
     }));
     setResults(newResults);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[totalExpenses]);
+  },[members, expenses]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -33,8 +33,12 @@ export default function CalcList() {
           {result.person}が{results.find(result => result.amount < 0)?.person}に{result.amount}円を支払う
         </li>
       ))}
-      {/* <li className="bg-emerald-100 p-2 rounded-lg text-sm">ゾロさんがルフィさんに2700円を支払う</li>
-      <li className="bg-emerald-100 p-2 rounded-lg text-sm">サンジさんがルフィさんに9600円を支払う</li>         */}
+      {results.filter(result => result.amount < 0)?.length > 1 && (
+        results.filter((result, index) => result.amount < 0 && index > 1).map((result) => (
+          <li key={result.personId} className="bg-red-100 p-2 rounded-lg text-sm">
+            {result.person}が{results.find(result => result.amount < 0)?.person}から{Math.abs(result.amount)}円を受け取る
+          </li>
+        )))}
     </ul>
   </div>
   )

@@ -86,27 +86,6 @@ export default function PayList() {
             </Button>
           </li>
         ))}
-        {/* <li className="flex gap-2 items-center p-2 bg-neutral-50 rounded-lg">
-          <p className="flex-1 text-sm">ルフィが焼肉代で24000円支払い</p>
-          <Button className="w-12 h-8" size="icon">
-            <Trash2 />
-            <span className="sr-only">削除</span>
-          </Button>
-        </li>
-        <li className="flex gap-2 items-center p-2 bg-neutral-50 rounded-lg">
-          <p className="flex-1 text-sm">ゾロがお酒で9000円支払い</p>
-          <Button className="w-12 h-8" size="icon">
-            <Trash2 />
-            <span className="sr-only">削除</span>
-          </Button>
-        </li>
-        <li className="flex gap-2 items-center p-2 bg-neutral-50 rounded-lg">
-          <p className="flex-1 text-sm">サンジがタクシーで2100円支払い</p>
-          <Button className="w-12 h-8" size="icon">
-            <Trash2 />
-            <span className="sr-only">削除</span>
-          </Button>
-        </li> */}
       </ul>
     </div>
   );

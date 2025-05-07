@@ -6,6 +6,13 @@ import {PlusIcon} from "lucide-react";
 export default function MemberList() {
   const {members, addMember, memberInput, updateMemberInput} = useCalcStore();
 
+  // キーボードのEnterキーを押したときにメンバーを追加
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && memberInput.trim()) {
+      addMember();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -23,14 +30,12 @@ export default function MemberList() {
             value={memberInput || ""}
             placeholder="名前を入力"
             className="flex-1 border-neutral-300"
+            onKeyDown={handleKeyDown}
           />
           <Button
             className=""
-            onClick={() => {
-              if (!memberInput) return;
-              addMember();
-              updateMemberInput("");
-            }}
+            onClick={addMember}
+            disabled={!memberInput.trim()}
           >
             <PlusIcon />
             追加

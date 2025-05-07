@@ -1,8 +1,8 @@
 import {useMemo} from "react";
-import {useMembersStore} from "../hooks/useCalcStore";
+import {useCalcStore} from "../hooks/useCalcStore";
 
 export default function CalcList() {
-  const {members, expenses, totalExpenses} = useMembersStore();
+  const {members, expenses, totalExpenses} = useCalcStore();
   // const [results, setResults] = useState<
   //   {personId: string; person: string; amount: number}[]
   // >([]);

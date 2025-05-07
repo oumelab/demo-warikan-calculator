@@ -1,4 +1,4 @@
-import {useMembersStore} from "../hooks/useCalcStore";
+import {useCalcStore} from "../hooks/useCalcStore";
 
 import {
   Select,
@@ -15,11 +15,21 @@ import {Trash2} from "lucide-react";
 import {useEffect, useState} from "react";
 
 export default function PayList() {
-  const {members, expenses, setExpenses, totalExpenses, setTotalExpenses} =
-    useMembersStore();
-  const [memberId, setMemberId] = useState("");
-  const [detail, setDetail] = useState("");
-  const [amount, setAmount] = useState(0);
+  const {
+    members,
+    expenses,
+    selectedMemberId,
+    expenseDetail,
+    expenseAmount,
+    updateExpenseAmount,
+    updateSelectedMemberId,
+    updateExpenseDetail,
+    addExpense,
+    removeExpense,
+  } = useCalcStore();
+  // const [memberId, setMemberId] = useState("");
+  // const [detail, setDetail] = useState("");
+  // const [amount, setAmount] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -27,31 +37,6 @@ export default function PayList() {
       setIsReady(true);
     }
   }, [members]);
-
-  const handleAddExpense = () => {
-    if (memberId && detail && amount) {
-      const newExpense = {id: crypto.randomUUID(), memberId, detail, amount};
-      setExpenses(
-        expenses && expenses.length > 0
-          ? [...expenses, newExpense]
-          : [newExpense]
-      );
-      setTotalExpenses(totalExpenses + amount);
-      setMemberId("");
-      setDetail("");
-      setAmount(0);
-    }
-  };
-
-  const handleDeleteExpense = (id: string) => {
-    if (expenses) {
-      const newExpenses = expenses.filter((expense) => expense.id !== id);
-      const deletedExpense =
-        expenses.find((expense) => expense.id === id)?.amount ?? 0;
-      setTotalExpenses(totalExpenses - deletedExpense);
-      setExpenses(newExpenses);
-    }
-  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,15 +48,20 @@ export default function PayList() {
       </div>
       <h2 className="text-lg font-bold">支払い記録</h2>
       <div className="flex flex-col gap-3">
-        <Select name={memberId} onValueChange={(value) => setMemberId(value)}>
+        <Select
+          name={selectedMemberId}
+          onValueChange={(value) => updateSelectedMemberId(value)}
+        >
           <SelectTrigger className="w-full border-neutral-300 bg-white">
-            <SelectValue placeholder={isReady ? "支払った人" : "メンバーを2名以上追加してください"} />
+            <SelectValue
+              placeholder={
+                isReady ? "支払った人" : "メンバーを2名以上追加してください"
+              }
+            />
           </SelectTrigger>
           <SelectContent className="bg-white">
             <SelectGroup>
-              <SelectLabel>
-                支払った人
-              </SelectLabel>
+              <SelectLabel>支払った人</SelectLabel>
               {members?.map((member) => (
                 <SelectItem key={member.id} value={member.id}>
                   {member.name}
@@ -83,18 +73,18 @@ export default function PayList() {
         <div className="flex gap-2">
           <Input
             type="text"
-            onChange={(e) => setDetail(e.target.value)}
-            value={detail}
+            onChange={(e) => updateExpenseDetail(e.target.value)}
+            value={expenseDetail || ""}
             placeholder="内容"
           />
           <Input
             type="number"
-            onChange={(e) => setAmount(parseInt(e.target.value))}
-            value={amount}
+            onChange={(e) => updateExpenseAmount(parseInt(e.target.value))}
+            value={expenseAmount || ""}
             placeholder="金額"
           />
         </div>
-        <Button className="w-full" onClick={handleAddExpense} disabled={!isReady}>
+        <Button className="w-full" onClick={addExpense} disabled={!isReady}>
           記録する
         </Button>
       </div>
@@ -113,7 +103,7 @@ export default function PayList() {
               <Button
                 className="w-12 h-8"
                 size="icon"
-                onClick={() => handleDeleteExpense(expense.id)}
+                onClick={() => removeExpense(expense.id)}
               >
                 <Trash2 />
                 <span className="sr-only">削除</span>

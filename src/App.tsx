@@ -13,7 +13,7 @@ export default function App() {
           自動で最適な清算方法を算出します！
         </p>
       </div>
-      <div className="max-w-6xl mx-auto mt-6 grid grid-cols-3 gap-6">
+      <div className="max-w-6xl mx-auto mt-6 grid md:grid-cols-3 gap-6">
         <div className="bg-white border border-gray-300 rounded-lg shadow-lg py-6 px-4">
           <MemberList />
         </div>

@@ -1,12 +1,10 @@
-import {useState} from "react";
-import {useMembersStore} from "../hooks/useCalcStore";
+import {useCalcStore} from "../hooks/useCalcStore";
 import {Input} from "./ui/input";
 import {Button} from "./ui/button";
 import {PlusIcon} from "lucide-react";
 
 export default function MemberList() {
-  const {members, setMembers} = useMembersStore();
-  const [input, setInput] = useState("");
+  const {members, addMember, memberInput, updateMemberInput} = useCalcStore();
 
   return (
     <div className="flex flex-col gap-4">
@@ -21,19 +19,17 @@ export default function MemberList() {
         <div className="flex items-center gap-1">
           <Input
             type="text"
-            onChange={(e) => setInput(e.target.value)}
-            value={input || ""}
+            onChange={(e) => updateMemberInput(e.target.value)}
+            value={memberInput || ""}
             placeholder="名前を入力"
             className="flex-1 border-neutral-300"
           />
           <Button
             className=""
             onClick={() => {
-              if (input) {
-                const newMember = {id: crypto.randomUUID(), name: input};
-                setMembers(members ? [...members, newMember] : [newMember]);
-                setInput("");
-              }
+              if (!memberInput) return;
+              addMember();
+              updateMemberInput("");
             }}
           >
             <PlusIcon />
@@ -42,7 +38,10 @@ export default function MemberList() {
         </div>
         <ul className="mt-3 flex gap-2 flex-wrap">
           {members?.map((member) => (
-            <li key={member.id} className="w-fit bg-blue-100 px-3 py-1 rounded-full text-sm">
+            <li
+              key={member.id}
+              className="w-fit bg-blue-100 px-3 py-1 rounded-full text-sm"
+            >
               {member.name}
             </li>
           ))}

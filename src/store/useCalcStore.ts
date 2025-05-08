@@ -79,7 +79,6 @@ export const useCalcStore = create<CalcStore>((set, get) => ({
       memberInput: "", /// 入力をクリア
     });
   },
-
   // 支出関連のアクション
   updateExpenseDetail: (detail) => set({expenseDetail: detail}),
   updateExpenseAmount: (amount) => set({expenseAmount: amount}),

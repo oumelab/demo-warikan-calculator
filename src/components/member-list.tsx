@@ -2,15 +2,46 @@ import {useCalcStore} from "../store/useCalcStore";
 import {Input} from "./ui/input";
 import {Button} from "./ui/button";
 import {PlusIcon} from "lucide-react";
+import { useRef } from "react";
 
 export default function MemberList() {
-  const {members, addMember, memberInput, updateMemberInput} = useCalcStore();
+  // const {members, addMember, memberInput, updateMemberInput} = useCalcStore();
+  const members = useCalcStore((state) => state.members);
+  const addMember = useCalcStore((state) => state.addMember);
+  const memberInput = useCalcStore((state) => state.memberInput);
+  const updateMemberInput = useCalcStore((state) => state.updateMemberInput);
 
-  // キーボードのEnterキーを押したときにメンバーを追加
+  // IME入力中かどうかを追跡する
+  const isComposingRef = useRef(false);
+
+  // エンターキーでメンバーを追加
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && memberInput.trim()) {
+    // IME入力中はキー処理をスキップ
+    if (isComposingRef.current) return;
+
+    if (e.key === 'Enter' && memberInput.trim()) {
       addMember();
     }
+  };
+
+  // IME入力の開始時に呼ばれる
+  const handleCompositionStart = () => {
+    isComposingRef.current = true;
+  };
+
+  // IME入力の終了時に呼ばれる
+  const handleCompositionEnd = (e: React.CompositionEvent<HTMLInputElement>) => {
+    isComposingRef.current = false;
+    
+    // IME確定直後にEnterキーとして処理されないように少し遅延させる
+    setTimeout(() => {
+      // IME入力が終わった後、入力欄にフォーカスがあるときのみエンターキー処理
+      const inputEl = e.target as HTMLInputElement;
+      if (document.activeElement === inputEl && inputEl.value.trim()) {
+        // エンターキーが押されていたら処理（Enterキーのkeydownイベントがcompositionendの後に発生する場合の対策）
+        // ここでは何もしない（handleKeyDownに任せる）
+      }
+    }, 10);
   };
 
   return (
@@ -31,6 +62,8 @@ export default function MemberList() {
             placeholder="名前を入力"
             className="flex-1 border-neutral-300"
             onKeyDown={handleKeyDown}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
           />
           <Button
             className=""

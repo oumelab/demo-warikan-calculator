@@ -27,9 +27,6 @@ export default function PayList() {
     addExpense,
     removeExpense,
   } = useCalcStore();
-  // const [memberId, setMemberId] = useState("");
-  // const [detail, setDetail] = useState("");
-  // const [amount, setAmount] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {

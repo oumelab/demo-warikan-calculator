@@ -1,6 +1,7 @@
-import {createBrowserRouter, Navigate, RouterProvider} from "react-router";
+import {createHashRouter, Navigate, RouterProvider} from "react-router";
 import DemoApp from "./pages/demo-app";
 import ModelApp from "./pages/model-app";
+import NotFound from "./pages/not-found";
 
 export default function App() {
   return (
@@ -8,7 +9,7 @@ export default function App() {
   )
 }
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     index: true,
     Component: () => Navigate({ to: "/demo-app" }),
@@ -23,6 +24,6 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to="/" />,
+    Component: NotFound,
   }
 ])

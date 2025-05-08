@@ -1,4 +1,4 @@
-import {useCalcStore} from "../hooks/useCalcStore";
+import {useCalcStore} from "../store/useCalcStore";
 import {Input} from "./ui/input";
 import {Button} from "./ui/button";
 import {PlusIcon} from "lucide-react";

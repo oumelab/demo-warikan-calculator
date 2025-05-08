@@ -1,4 +1,4 @@
-import {useCalcStore} from "../hooks/useCalcStore";
+import {useCalcStore} from "../store/useCalcStore";
 
 import {
   Select,

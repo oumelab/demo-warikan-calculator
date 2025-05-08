@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {useCalcStore} from "../hooks/useCalcStore";
+import {useCalcStore} from "../store/useCalcStore";
 
 export default function CalcList() {
   const {members, expenses, totalExpenses} = useCalcStore();

@@ -1,5 +1,6 @@
 import {createBrowserRouter, Navigate, RouterProvider} from "react-router";
 import DemoApp from "./pages/demo-app";
+import ModelApp from "./pages/model-app";
 
 export default function App() {
   return (
@@ -15,5 +16,9 @@ const router = createBrowserRouter([
   {
     path: "demo-app",
     element: <DemoApp />,
+  },
+  {
+    path: "/model-app",
+    element: <ModelApp />,
   }
 ])

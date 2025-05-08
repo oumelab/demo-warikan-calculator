@@ -20,5 +20,9 @@ const router = createBrowserRouter([
   {
     path: "/model-app",
     element: <ModelApp />,
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" />,
   }
 ])

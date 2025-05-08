@@ -25,5 +25,5 @@ const router = createHashRouter([
   {
     path: "*",
     Component: NotFound,
-  }
+  },
 ])

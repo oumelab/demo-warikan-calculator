@@ -1,54 +1,47 @@
 import {create} from "zustand";
 
+type ExpenseInput = {
+  memberId: string;
+  detail: string;
+  amount: number | null;
+};
+
+// メンバーの型
+type Member = {
+  id: string;
+  name: string;
+};
+
+// 支出の型
+type Expense = {
+  id: string;
+  memberId: string;
+  detail: string;
+  amount: number;
+};
+
 type CalcStore = {
-  members:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | [];
-  expenses:
-    | {
-        id: string; // crypto.randomUUID()
-        memberId: string;
-        detail: string;
-        amount: number;
-      }[]
-    | [];
+  members: Member[];
+  expenses: Expense[];
   totalExpenses: number;
 
   // フォーム入力状態
   memberInput: string;
-  expenseDetail: string;
-  expenseAmount: number | null;
-  selectedMemberId: string;
+  expensesInput: ExpenseInput;
 
   // データ操作アクション
   addMember: () => void;
   updateMemberInput: (input: string) => void;
 
   addExpense: () => void;
-  updateExpenseDetail: (detail: string) => void;
-  updateExpenseAmount: (amount: number | null) => void;
-  updateSelectedMemberId: (id: string) => void;
+  updateExpenseInput: (input: Partial<ExpenseInput>) => void;
+  resetExpenseInput: () => void;
 
   removeExpense: (id: string) => void;
 
   // データ取得アクション 修正前
-  setMembers: (
-    members: {
-      id: string;
-      name: string;
-    }[]
-  ) => void;
-  setExpenses: (
-    expenses: {
-      id: string;
-      memberId: string;
-      detail: string;
-      amount: number;
-    }[]
-  ) => void;
+  setMembers: (members: Member[]) => void;
+  setExpenses: (expenses: Expense[]) => void;
   setTotalExpenses: (totalExpenses: number) => void;
 };
 
@@ -58,9 +51,11 @@ export const useCalcStore = create<CalcStore>((set, get) => ({
   totalExpenses: 0,
 
   memberInput: "",
-  expenseDetail: "",
-  expenseAmount: null,
-  selectedMemberId: "",
+  expensesInput: {
+    memberId: "",
+    detail: "",
+    amount: null,
+  },
 
   // メンバー関連のアクション
   updateMemberInput: (input) => set({memberInput: input}),
@@ -79,52 +74,52 @@ export const useCalcStore = create<CalcStore>((set, get) => ({
       memberInput: "", /// 入力をクリア
     });
   },
+
   // 支出関連のアクション
-  updateExpenseDetail: (detail) => set({expenseDetail: detail}),
-  updateExpenseAmount: (amount) => set({expenseAmount: amount}),
-  updateSelectedMemberId: (id) => set({selectedMemberId: id}),
+  updateExpenseInput: (input) =>
+    set((state) => ({
+      expensesInput: {...state.expensesInput, ...input},
+    })),
+
+  resetExpenseInput: () =>
+    set({expensesInput: {memberId: "", detail: "", amount: null}}),
 
   addExpense: () => {
-    const {
-      expenses,
-      selectedMemberId,
-      expenseDetail,
-      expenseAmount,
-      totalExpenses,
-    } = get();
+      const {expensesInput, expenses, totalExpenses} = get();
+      const {memberId, detail, amount} = expensesInput;
 
-    if (!selectedMemberId || !expenseDetail || !expenseAmount || expenseAmount <= 0) return;
+      if (memberId && detail && amount && amount > 0) {
+        const newExpense = {
+          id: crypto.randomUUID(),
+          memberId,
+          detail,
+          amount,
+        };
 
-    const newExpense = {
-      id: crypto.randomUUID(),
-      memberId: selectedMemberId,
-      detail: expenseDetail,
-      amount: expenseAmount,
-    };
-
-    set({
-      expenses: [...expenses, newExpense],
-      totalExpenses: totalExpenses + expenseAmount,
-      // フォームをクリア
-      expenseDetail: "",
-      expenseAmount: null,
-    });
-  },
+        set({
+          expenses: [...expenses, newExpense],
+          totalExpenses: totalExpenses + amount,
+          expensesInput: {memberId: "", detail: "", amount: null},
+        });
+      }
+    },   
 
   removeExpense: (id: string) => {
     const {expenses, totalExpenses} = get();
-    const expense = expenses.find(e => e.id === id);
+    const expense = expenses.find((e) => e.id === id);
 
     if (!expense) return;
 
     set({
-      expenses: expenses.filter(e => e.id !== id),
+      expenses: expenses.filter((e) => e.id !== id),
       totalExpenses: totalExpenses - expense.amount,
     });
   },
 
   // 以前のセッターも互換性のために残しておく
-  setMembers: (members) => set({members}),
-  setExpenses: (expenses) => set({expenses}),
-  setTotalExpenses: (totalExpenses) => set({totalExpenses}),
+  setMembers: (members: {id: string; name: string}[]) => set({members}),
+  setExpenses: (
+    expenses: {id: string; memberId: string; detail: string; amount: number}[]
+  ) => set({expenses}),
+  setTotalExpenses: (totalExpenses: number) => set({totalExpenses}),
 }));

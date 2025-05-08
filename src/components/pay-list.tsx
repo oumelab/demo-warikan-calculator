@@ -1,4 +1,4 @@
-import { useCalcStore } from "../store/useCalcStore";
+import {useCalcStore} from "../store/useCalcStore";
 
 import {
   Select,
@@ -9,23 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2 } from "lucide-react";
-import { useMemo } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import {Trash2} from "lucide-react";
+import {Button} from "./ui/button";
+import {Input} from "./ui/input";
+import {usePaymentLogic} from "@/hooks/usePaymentLogic";
 
 export default function PayList() {
+  const {isMembersSufficient, isFormValid, handleAddExpense, error} =
+    usePaymentLogic();
   const members = useCalcStore((state) => state.members);
   const expenses = useCalcStore((state) => state.expenses);
   const expensesInput = useCalcStore((state) => state.expensesInput);
   const updateExpenseInput = useCalcStore((state) => state.updateExpenseInput);
-  const addExpense = useCalcStore((state) => state.addExpense);
   const removeExpense = useCalcStore((state) => state.removeExpense);
-
-  // 支払い入力が有効かどうかを判定
-  const isMembersSufficient = useMemo(() => {
-    return members.length >= 2;
-  }, [members]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,7 +38,9 @@ export default function PayList() {
           <SelectTrigger className="w-full border-neutral-300 bg-white">
             <SelectValue
               placeholder={
-                isMembersSufficient ? "支払った人" : "メンバーを2名以上追加してください"
+                isMembersSufficient
+                  ? "支払った人"
+                  : "メンバーを2名以上追加してください"
               }
             />
           </SelectTrigger>
@@ -63,6 +61,7 @@ export default function PayList() {
             onChange={(e) => updateExpenseInput({detail: e.target.value})}
             value={expensesInput.detail}
             placeholder="内容"
+            disabled={!isMembersSufficient}
           />
           <Input
             type="number"
@@ -72,12 +71,19 @@ export default function PayList() {
             }}
             value={expensesInput.amount ?? ""}
             placeholder="金額"
+            min="1"
+            disabled={!isMembersSufficient}
           />
         </div>
-        <Button className="w-full" onClick={addExpense} disabled={!isMembersSufficient}>
+        <Button
+          className="w-full"
+          onClick={handleAddExpense}
+          disabled={!isMembersSufficient || !isFormValid}
+        >
           記録する
         </Button>
       </div>
+      {error && <p className="text-red-500">{error}</p>}
       <ul className="flex flex-col gap-2 h-40 overflow-y-auto">
         {expenses &&
           expenses.length > 0 &&

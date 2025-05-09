@@ -15,7 +15,7 @@ export default function DemoApp() {
             自動で最適な清算方法を算出します！
           </p>
         </div>
-        <p className="text-right text-sm"><Link to="/model-app" className="underline underline-offset-2">お手本コード</Link></p>
+        <p className="text-right text-sm"><Link to="/model-app" className="underline underline-offset-2">お手本コードを見る &gt;</Link></p>
       </div>
       <div className="max-w-6xl mx-auto mt-6 grid md:grid-cols-3 gap-6">
         <div className="bg-white border border-gray-300 rounded-lg shadow-lg py-6 px-4">

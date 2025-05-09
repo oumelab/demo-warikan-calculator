@@ -16,7 +16,7 @@ export default function ModelApp() {
               自動で最適な精算方法を算出します！
             </p>
           </div>
-          <p className="text-right text-sm"><Link to="/" className="underline underline-offset-2">トップに戻る</Link></p>
+          <p className="text-right text-sm"><Link to="/" className="underline underline-offset-2">トップに戻る &gt;</Link></p>
         </div>
         <div className="flex space-x-8 justify-center">
           <ModelMemberList />

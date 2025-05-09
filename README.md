@@ -82,7 +82,7 @@ I solved challenges with deploying a SPA using `React Router` to GitHub Pages:
 ```
 
 ### Future Improvements
-- [] Data persistence (LocalStorage or IndexedDB)
-- [] Managing multiple groups
-- [] Adding history functionality
-- [] Theme customization
+- [ ] Data persistence (LocalStorage or IndexedDB)
+- [ ] Managing multiple groups
+- [ ] Adding history functionality
+- [ ] Theme customization
